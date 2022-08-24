@@ -1,0 +1,76 @@
+﻿using System;
+using System.Linq;
+using SocialNetwork.BLL.Exceptions;
+using SocialNetwork.BLL.Models;
+using SocialNetwork.BLL.Services;
+
+namespace SocialNetwork.PLL.Views
+{
+    public class UserMenuView
+    {
+        private UserService userService;
+        public UserMenuView(UserService userService)
+        {
+            this.userService = userService;
+        }
+
+        public void Show(User user)
+        {
+            while(true)
+            {
+                Console.WriteLine("Входящие сообщения: {0}", user.IncomingMessages.Count());
+                Console.WriteLine("Исходящие сообщения: {0}", user.OutgoingMessages.Count());
+
+                Console.WriteLine("Просмотреть информацию о моём профиле (нажмите 1)");
+                Console.WriteLine("Редактировать мой профиль (нажмите 2)");
+                Console.WriteLine("Редактировать список друзей (нажмите 3)");
+                Console.WriteLine("Написать сообщение (нажмите 4)");
+                Console.WriteLine("Просмотреть входящие сообщения (нажмите 5)");
+                Console.WriteLine("просмотреть исходящие сообщения (нажмите 6)");
+                Console.WriteLine("Выйти из профиля (нажмите 7)");
+
+                string input = Console.ReadLine();
+
+                if (input == "7") break;
+
+                switch (input)
+                {
+                    case "1":
+                        {
+                            Program.userInfoView.Show(user);
+                            break;
+                        }
+                    case "2":
+                        {
+                            Program.userDataUpdateView.Show(user);
+                            user = userService.FindById(user.Id);
+                            break;
+                        }
+                    case "3":
+                        {
+                            Program.userAddAsFriendView.Show(user);
+                            user = userService.FindById(user.Id);
+                            break;
+                        }
+                    case "4":
+                        {
+                            Program.messageSendingView.Show(user);
+                            user = userService.FindById(user.Id);
+                            break;
+                        }
+                    case "5":
+                        {
+                            Program.userIncomingMessageView.Show(user.IncomingMessages);
+                            break;
+                        }
+                    case "6":
+                        {
+                            Program.userOutcomingMessageView.Show(user.OutgoingMessages);
+                            break;
+                        }
+
+                }
+            }
+        }
+    }
+}
